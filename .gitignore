@@ -1,5 +1,9 @@
 __MACOSX/
 cj/ 
+.files/
+.chainlit/
+chainlit.md
+chainlit/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

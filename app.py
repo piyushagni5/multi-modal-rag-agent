@@ -49,8 +49,8 @@ async def start():
             timeout=300
         ).send()
 
-    if len(files) > 5:
-        files = files[:5]
+    if len(files) > 7:
+        files = files[:7]
 
     msg = cl.Message(author="assistant", content=f"Processing {len(files)} files ...")
     await msg.send()

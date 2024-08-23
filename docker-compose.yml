@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  multimodal-rag-app:
+    build: app
+    privileged: true
+    container_name: multimodal-rag-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.config/gcloud/application_default_credentials.json:/root/.config/gcloud/application_default_credentials.json
+    environment:
+      - CHUNK_SIZE
+      - CHUNK_OVERLAP
+      - PROJECT_ID
+      - REGION      
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+      - GOOGLE_CLOUD_PROJECT=${PROJECT_ID}

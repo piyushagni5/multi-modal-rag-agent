@@ -11,7 +11,7 @@ from chainlit.types import AskFileResponse
 from multiModalRAG import *
 
 welcome_message = """Welcome to the Chainlit Multi-Modal QA demo! To get started:
-1. Upload upto 5 files of type PDF, text or image
+1. Upload upto 4 files of type PDF, text or image
 2. Ask a question about the file
 """
 text_splitter = RecursiveCharacterTextSplitter(
@@ -49,8 +49,8 @@ async def start():
             timeout=300
         ).send()
 
-    if len(files) > 7:
-        files = files[:7]
+    if len(files) > 5:
+        files = files[:5]
 
     msg = cl.Message(author="assistant", content=f"Processing {len(files)} files ...")
     await msg.send()
@@ -120,6 +120,6 @@ async def main(message: cl.Message):
 # Add a way to detect companies from a query and retrieve vector from the store
 # CLiP embeddings
 
-# if __name__ == "__main__":
-#     # import chainlit as cl
-#     cl.run(host="0.0.0.0", port=8000, debug=True)
+if __name__ == "__main__":
+    # Run Chainlit server to keep the application running
+    cl.run(host="0.0.0.0", port=8000, debug=True)

@@ -14,10 +14,10 @@ google-generativeai = "^0.7.2"
 google-auth = "^2.32.0"
 google-cloud-core = "^2.4.1"
 jupyterlab = "^4.2.4"
-langchain-chroma = "^0.1.2"
+langchain-chroma = "^0.1.2" d
 langchain-google-vertexai = "^1.0.8"
 pillow = "^10.4.0"
-pypdf = "^4.3.1"
+pypdf = "^4.3.1" d
 
 [requires]
 python_version = ">=3.9, <3.13"

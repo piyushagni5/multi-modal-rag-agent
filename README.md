@@ -35,8 +35,6 @@ We are using option 2 in this project making use of Gemini pro text and vision m
 
 ### Prerequisites
 
-- Python 3.9+
-- Google Cloud SDK installed and configured.
 - Google Cloud account with Vertex AI enabled
 - API keys for Vertex AI
 - Access to Gemini models

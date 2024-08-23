@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app 
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["chainlit", "run", "app.py"]
 
 # Expose the port the app runs on d
 EXPOSE 8000

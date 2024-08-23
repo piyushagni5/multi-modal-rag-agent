@@ -6,7 +6,6 @@ This repository hosts a project that leverages LLMs to create a Multi-modal Retr
 
 The Multi-Modal RAG Agent is designed to function as a financial analyst, answering user queries with detailed investment advice. It combines multiple modalities and AI capabilities to interpret and analyze financial documents, containing texts, images and tables, providing responses that are both informed and contextually relevant.
 
-![Demo](assets/demo.png)
 
 ### Key Features
 
@@ -37,9 +36,11 @@ We are using option 2 in this project making use of Gemini pro text and vision m
 ### Prerequisites
 
 - Python 3.9+
+- Google Cloud SDK installed and configured.
 - Google Cloud account with Vertex AI enabled
 - API keys for Vertex AI
 - Access to Gemini models
+- Docker installed.
 
 <!--- ### Installation
 
@@ -55,3 +56,40 @@ We are using option 2 in this project making use of Gemini pro text and vision m
    cd financial-analyst-rag-agent
     ```
 !--->
+
+## ToDo:
+
+1. Set Up Google Cloud Credentials Locally:
+```
+gcloud auth application-default login
+```
+This will open a browser window for authentication. After completion, credentials will be stored in ~/.config/gcloud/application_default_credentials.json.
+
+2. Clone the repository:
+```
+git clone https://github.com/yourusername/multi-modal-rag.git
+cd multi-modal-rag
+```
+3. Create the .env File
+```
+PROJECT_ID=your-google-cloud-project-id
+REGION=project-region
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=100
+```
+
+4. Build and run the Docker container:
+```
+docker-compose up --build
+```
+
+5. Open the Application:
+```
+http://localhost:8000
+```
+6. Upload Files and Ask Questions:
+
+- Upload up to 4 files (PDF, text, or image).
+- After uploading, ask questions about the content of the files, and the application will provide answers.
+
+![Demo](assets/demo.png)

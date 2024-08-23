@@ -19,11 +19,8 @@ from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.storage import InMemoryStore
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
-
 import google.auth
-
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +29,7 @@ credentials, _ = google.auth.default()
 
 PROJECT_ID = os.environ.get('PROJECT_ID')
 REGION = os.environ.get('REGION')
-VERTEX_API_KEY = os.environ.get('VERTEX_API_KEY')
+# VERTEX_API_KEY = os.environ.get('VERTEX_API_KEY')
 
 vertexai.init(project=PROJECT_ID, location=REGION, credentials=credentials)
 

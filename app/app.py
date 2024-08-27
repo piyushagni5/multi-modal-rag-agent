@@ -14,6 +14,7 @@ welcome_message = """Welcome to the Chainlit Multi-Modal QA demo! To get started
 1. Upload upto 4 files of type PDF, text or image
 2. Ask a question about the file
 """
+
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=int(os.environ.get("CHUNK_SIZE", 1000)),
     chunk_overlap = int(os.environ.get("CHUNK_OVERLAP", 100)),
@@ -28,9 +29,15 @@ def process_file(file: AskFileResponse):
     else:
         raise ValueError(f"Unsupported file type: {file.type}")
     
+    # Create an instance of the selected Loader class
     loader = Loader(file.path)
+    
+    # Load the content of the file into a list of documents
     docs = loader.load()
+    
+    # Extract the page content from each document
     texts = [d.page_content for d in docs]
+
     # texts = text_splitter.split_documents(docs)
     # for i, text in enumerate(texts):
     #     text.metadata["source"] = f"source_{i}"
@@ -39,6 +46,7 @@ def process_file(file: AskFileResponse):
 @cl.on_chat_start
 async def start():
     files = None
+    # Prompt the user to upload files until files are received
     while files is None:
         files = await cl.AskFileMessage(
             author="assistant",
@@ -49,9 +57,11 @@ async def start():
             timeout=300
         ).send()
 
+    # Limit the number of files to 5 if more than 5 files are uploaded
     if len(files) > 5:
         files = files[:5]
 
+    # Notify the user that files are being processed
     msg = cl.Message(author="assistant", content=f"Processing {len(files)} files ...")
     await msg.send()
 
@@ -64,20 +74,21 @@ async def start():
         else:
             texts.extend(process_file(file))
 
-    # Get text and table summaries
-    texts = texts[:5] # Limit to 5 pages for demo
+    # Limit the text content to 5 pages for demonstration purposes
+    texts = texts[:5] 
+    # Generate summaries for the text and table content
     text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
 
     # Image summaries
     image_base64_list, image_summaries = generate_image_summaries(image_files)
     
-    # The vectorstore to use to index the summaries
+    # Initialize the vectorstore for indexing the summaries
     vectorstore = Chroma(
         collection_name="mm_rag",
         embedding_function=VertexAIEmbeddings(model_name="textembedding-gecko@latest"),
     )
 
-    # Create the retriever
+    # Create a multi-vector retriever using the vectorstore and the summaries
     retriever_multi_vector_img = create_multi_vector_retriever(
         vectorstore=vectorstore,
         text_summaries=text_summaries,

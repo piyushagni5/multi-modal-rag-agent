@@ -49,6 +49,7 @@ def generate_text_summaries(texts, tables, summarize_texts=False):
     prompt_text = """You are an assistant tasked with summarizing tables and texts for retrieval. \
         These summaries will be embedded and used to retrieve the raw text or table elements. \
         Give a concise summary of the table or text that is well optimized for retrieval. Table or text: {element} """
+    
     prompt = PromptTemplate.from_template(prompt_text)
     empty_response = RunnableLambda(
         lambda x: AIMessage(content="Error processing Document.")
@@ -170,18 +171,18 @@ def create_multi_vector_retriever(
         image_summaries: List of image summaries.
         images: List of image contents.
     Returns:
-        retriever: The created multi-vector retriever.
+        retriever: The created multi-vector retriever that can handle retrieval tasks across these different types of data.
     """
     
     # Initialize the storage layer
-    store = InMemoryStore()
+    store = InMemoryStore() # InMemoryStore stores the actual document contents in the system's RAM
     id_key = "doc_id"
 
     # Create the multi-vector retriever
     retriever = MultiVectorRetriever(
-        vectorstore=vectorstore,
-        docstore=store,
-        id_key=id_key,
+        vectorstore=vectorstore, #  is where the embeddings (vector representations) of the summaries are stored
+        docstore=store, # docstore holds the full content
+        id_key=id_key, # links the summaries in the vectorstore with their corresponding full content in the docstore
     )
 
     # Helper function to add documents to the vectorstore and docstore
@@ -195,11 +196,16 @@ def create_multi_vector_retriever(
         Returns:
             None
         """
+        # Generate unique IDs for each document
         doc_ids = [str(uuid.uuid4()) for _ in doc_contents]
+
+        # Create Document objects for each summary
         summary_docs = [
             Document(page_content=s, metadata={id_key: doc_ids[i]}) for i, s in enumerate(doc_summaries)
         ]
+        # Add the summary documents to the vectorstore
         retriever.vectorstore.add_documents(summary_docs)
+        # Map the document IDs to their full content in the docstore
         retriever.docstore.mset(list(zip(doc_ids, doc_contents)))
 
     # Add texts, tables and images
